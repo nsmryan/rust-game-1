@@ -1,0 +1,9 @@
+{
+  "player_size": 12.0,
+  "player_speed": 3.0,
+  "player_ratio": 0.90,
+  "player_tol": 0.1,
+  "dot_size": 2.0,
+  "dot_progress": 0.004,
+  "num_dots": 30
+}

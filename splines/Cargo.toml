@@ -1,0 +1,41 @@
+[package]
+name = "splines"
+version = "0.2.1"
+license = "BSD-3-Clause"
+authors = ["Dimitri Sabadie <dimitri.sabadie@gmail.com>"]
+description = "Spline interpolation made easy"
+keywords = ["spline", "interpolation"]
+categories = ["science"]
+homepage = "https://github.com/phaazon/splines"
+repository = "https://github.com/phaazon/splines"
+documentation = "https://docs.rs/splines"
+readme = "README.md"
+
+[badges]
+travis-ci = { repository = "phaazon/splines", branch = "master" }
+is-it-maintained-issue-resolution = { repository = "phaazon/splines" }
+is-it-maintained-open-issues = { repository = "phaazon/splines" }
+maintenance = { status = "actively-developed" }
+
+[features]
+default = ["std", "impl-cgmath"]
+serialization = ["serde", "serde_derive"]
+std = []
+impl-cgmath = ["cgmath"]
+impl-nalgebra = ["nalgebra"]
+
+[dependencies.nalgebra]
+version = "0.14"
+optional = true
+
+[dependencies.cgmath]
+version = "0.16"
+optional = true
+
+[dependencies.serde]
+version = "1"
+optional = true
+
+[dependencies.serde_derive]
+version = "1"
+optional = true
