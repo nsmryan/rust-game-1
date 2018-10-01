@@ -5,5 +5,5 @@
   "player_tol": 0.1,
   "dot_size": 2.0,
   "dot_progress": 0.004,
-  "num_dots": 30
+  "num_dots": 100
 }

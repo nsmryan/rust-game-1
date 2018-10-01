@@ -7,6 +7,7 @@ extern crate serde_derive;
 extern crate serde;
 extern crate splines;
 extern crate ncollide2d;
+extern crate ezing;
 
 use std::fs::File;
 use std::io;
@@ -22,7 +23,7 @@ use rand::prelude::*;
 use warmy::{FSKey, Load, Loaded, Storage, Store, StoreOpt, Res};
 
 use ggez::*;
-use ggez::graphics::{DrawMode, Point2, Vector2};
+use ggez::graphics::{DrawMode, Point2, Vector2, Mesh, Drawable};
 use ggez::graphics;
 use ggez::event::{EventHandler, Keycode, Mod};
 use ggez::timer;
@@ -215,7 +216,7 @@ struct MainState {
 }
 
 impl MainState {
-    pub fn new(_ctx : &mut Context) -> GameResult<MainState> {
+    pub fn new(ctx : &mut Context) -> GameResult<MainState> {
         let state =
             MainState { player    : Player::new(),
                         input     : InputState::new(),
@@ -239,9 +240,8 @@ impl EventHandler for MainState {
           self.player.pos.x += self.input.xaxis;
 
           for dot in self.dots.iter_mut() {
-            //dot.pos.x += (self.rng.gen::<f32>() - 0.5) * 2.0;
-            //dot.pos.y += (self.rng.gen::<f32>() - 0.5) * 2.0;
-            dot.pos = dot.spline.sample(dot.progress).unwrap();
+            let spline_progress = ezing::sine_inout(dot.progress);
+            dot.pos = dot.spline.clamped_sample(spline_progress);
           }
       }
 
@@ -329,14 +329,18 @@ impl EventHandler for MainState {
 fn draw_dots(state : &mut MainState, ctx: &mut Context) {
   let config = state.config.borrow();
 
+  // NOTE recreating mesh every time instead of using 
+  // persistent one.
+  let dot_mesh = Mesh::new_circle(ctx,
+                                  DrawMode::Fill,
+                                  Point2::new(0.0, 0.0),
+                                  config.dot_size,
+                                  1.0).unwrap();
+
   graphics::set_color(ctx, graphics::WHITE).unwrap();
 
   for dot in state.dots.iter() {
-    graphics::circle(ctx,
-                     DrawMode::Fill,
-                     dot.pos,
-                     config.dot_size,
-                     2.0).unwrap();
+    dot_mesh.draw(ctx, dot.pos, 0.0);
   }
 }
 
